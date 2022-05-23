@@ -42,14 +42,14 @@ def devScreen(text,color,x,y):
 def plot_car(gameWindow , color , car_x , car_y , car_size_y , car_size_x):
     pygame.draw.rect(gameWindow , color , [ car_x , car_y , car_size_y , car_size_x ])
 
-def plot_fuel(gameWindow , color , fuel_x , fuel_y , fuel_size_y , fuel_size_x):
-    pygame.draw.rect(gameWindow , color , [ fuel_x , fuel_y , fuel_size_y , fuel_size_x ])
+def plot_fuel(gameWindow , color , fuel_x , fuel_y):
+    pygame.draw.rect(gameWindow , color , [ fuel_x , fuel_y , 50,50 ])
 
 def plot_object(gameWindow , color , object_position_x , object_position_y , object_size_x , object_size_y):
     pygame.draw.rect(gameWindow , color , [object_position_x , object_position_y , object_size_x , object_size_y])
 
-def plot_opposite_car(gameWindow , color , opposite_car_x , opposite_car_y , opposite_car_size_y , opposite_car_size_x):
-    pygame.draw.rect(gameWindow , color , [ opposite_car_x , opposite_car_y , opposite_car_size_y , opposite_car_size_x ])
+def plot_opposite_car(gameWindow , color , opposite_car_x , opposite_car_y):
+    pygame.draw.rect(gameWindow , color , [ opposite_car_x , opposite_car_y , 50 , 100])
 
 def plot_zebra(gameWindow , color , zebra_x , zebra_y , zebra_size_y , zebra_size_x):
     pygame.draw.rect(gameWindow , color , [ zebra_x , zebra_y , zebra_size_y , zebra_size_x ])
@@ -92,27 +92,19 @@ def gameloop():
     # Properties of the opposite car comming from the front
     opposite_car_position_x = random.randint(225 , 625)
     opposite_car_position_y = -100
-    opposite_car_size_x = 50
-    opposite_car_size_y = 100
     opposite_car_velocity_y = 20
 
     opposite_car1_position_x = random.randint(225 , 625)
     opposite_car1_position_y = -350
-    opposite_car1_size_x = 50
-    opposite_car1_size_y = 100
     opposite_car1_velocity_y = 20
 
     opposite_car2_position_x = random.randint(225 , 625)
     opposite_car2_position_y = -550
-    opposite_car2_size_x = 50
-    opposite_car2_size_y = 100
     opposite_car2_velocity_y = 20
 
     # Properties of fuel
     fuel_position_x = random.randint(225 , 625)
     fuel_position_y = -300
-    fuel_size_x = 50
-    fuel_size_y = 50
 
     zebra_position_x = 445
     zebra_position_y = -100
@@ -132,9 +124,6 @@ def gameloop():
     object_position_y = -50
 
     score = 0
-
-    # snk_list =[]
-    # snk_length = 1
 
     while not exit_game : # condition to not exit the game
 
@@ -282,30 +271,30 @@ def gameloop():
             if ( opposite_car_position_y > 700 ):
                 opposite_car_position_y = -150 
                 opposite_car_position_x = random.randint(225 , 625) 
-                plot_opposite_car(gameWindow , red , opposite_car_position_x , opposite_car_position_y ,opposite_car_size_x , opposite_car_size_y) 
+                plot_opposite_car(gameWindow , red , opposite_car_position_x , opposite_car_position_y) 
                 opposite_car_position_y += opposite_car_velocity_y 
 
-            plot_opposite_car(gameWindow , red , opposite_car_position_x , opposite_car_position_y ,opposite_car_size_x , opposite_car_size_y) 
+            plot_opposite_car(gameWindow , red , opposite_car_position_x , opposite_car_position_y) 
             opposite_car_position_y += opposite_car_velocity_y 
 
 
             if ( opposite_car1_position_y > 700 ):
                 opposite_car1_position_y = -150 
                 opposite_car1_position_x = random.randint(225 , 625) 
-                plot_opposite_car(gameWindow , gray , opposite_car1_position_x , opposite_car1_position_y ,opposite_car1_size_x , opposite_car1_size_y) 
+                plot_opposite_car(gameWindow , gray , opposite_car1_position_x , opposite_car1_position_y) 
                 opposite_car1_position_y += opposite_car1_velocity_y 
 
-            plot_opposite_car(gameWindow , gray , opposite_car1_position_x , opposite_car1_position_y ,opposite_car1_size_x , opposite_car1_size_y) 
+            plot_opposite_car(gameWindow , gray , opposite_car1_position_x , opposite_car1_position_y) 
             opposite_car1_position_y += opposite_car1_velocity_y 
 
 
             if ( opposite_car2_position_y > 700 ):
                 opposite_car2_position_y = -150 
                 opposite_car2_position_x = random.randint(225 , 625) 
-                plot_opposite_car(gameWindow , yellow , opposite_car2_position_x , opposite_car2_position_y ,opposite_car2_size_x , opposite_car2_size_y) 
+                plot_opposite_car(gameWindow , yellow , opposite_car2_position_x , opposite_car2_position_y) 
                 opposite_car2_position_y += opposite_car_velocity_y 
 
-            plot_opposite_car(gameWindow , yellow , opposite_car2_position_x , opposite_car2_position_y ,opposite_car2_size_x , opposite_car2_size_y) 
+            plot_opposite_car(gameWindow , yellow , opposite_car2_position_x , opposite_car2_position_y) 
             opposite_car2_position_y += opposite_car2_velocity_y 
 
             #-------------------------------------------------------------------------------------------------------------------------------
@@ -313,16 +302,16 @@ def gameloop():
 
             # Plotting the fuel ------------------------------------------------------------------------------------------------
 
-            plot_fuel(gameWindow , red , fuel_position_x , fuel_position_y , 20 , 20 )
+            plot_fuel(gameWindow , red , fuel_position_x , fuel_position_y )
             fuel_position_y += 20
 
             if ( fuel_position_y > 600 ):
                 fuel_position_y = -300 
                 fuel_position_x = random.randint(225 , 625)
-                plot_fuel(gameWindow , orange , fuel_position_x , fuel_position_y , fuel_size_x , fuel_size_y )
+                plot_fuel(gameWindow , orange , fuel_position_x , fuel_position_y )
                 fuel_position_y += -10
 
-            plot_fuel(gameWindow , orange , fuel_position_x , fuel_position_y , fuel_size_x , fuel_size_y )
+            plot_fuel(gameWindow , orange , fuel_position_x , fuel_position_y )
             fuel_position_y += -10
 
             #--------------------------------------------------------------------------------------------------------------------
