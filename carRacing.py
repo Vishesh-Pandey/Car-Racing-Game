@@ -51,9 +51,23 @@ def plot_object(gameWindow , color , object_position_x , object_position_y , obj
 def plot_opposite_car(gameWindow , color , opposite_car_x , opposite_car_y):
     pygame.draw.rect(gameWindow , color , [ opposite_car_x , opposite_car_y , 50 , 100])
 
-def plot_zebra(gameWindow , color , zebra_x , zebra_y , zebra_size_y , zebra_size_x):
-    pygame.draw.rect(gameWindow , color , [ zebra_x , zebra_y , zebra_size_y , zebra_size_x ])
-
+class Zebra:
+    def __init__(self , y ):
+        self.y = y
+        
+    def moveZebra(self):
+        self.y += 10
+        
+        if self.y > 700 :
+            self.y = -100
+        
+    def plotZebra(self):
+        pygame.draw.rect(gameWindow , "white" , [ 445 , self.y , 10 , 100 ])
+        
+zebra1 = Zebra(-100)        
+zebra2 = Zebra(100)        
+zebra3 = Zebra(300)        
+zebra4 = Zebra(500)        
 
 
 # Creating a game loop
@@ -105,19 +119,7 @@ def gameloop():
     # Properties of fuel
     fuel_position_x = random.randint(225 , 625)
     fuel_position_y = -300
-
-    zebra_position_x = 445
-    zebra_position_y = -100
-
-    zebra1_position_x = 445
-    zebra1_position_y = 100
-
-    zebra2_position_x = 445
-    zebra2_position_y = 300
-
-    zebra3_position_x = 445
-    zebra3_position_y = 500 
-
+        
     fps = 25
 
     object_position_x = random.randint(20 , screen_width/2)
@@ -180,37 +182,20 @@ def gameloop():
 
             # Plotting the zebra to show car is moving ------------------------------------------------------------------------------------------------
 
-            if ( zebra_position_y > 700 ):
-                zebra_position_y = -100
-                plot_zebra(gameWindow , white , 445, zebra_position_y , 10 , 100 )
-                zebra_position_y += 10
             
-            plot_zebra(gameWindow , white , 445, zebra_position_y , 10 , 100 )
-            zebra_position_y += 10
-
-            if ( zebra1_position_y > 700 ):
-                zebra1_position_y = -100
-                plot_zebra(gameWindow , white , 445, zebra1_position_y , 10 , 100 )
-                zebra1_position_y += 10
+            zebra1.moveZebra()
+            zebra1.plotZebra()
             
-            plot_zebra(gameWindow , white , 445, zebra1_position_y , 10 , 100 )
-            zebra1_position_y += 10
-
-            if ( zebra2_position_y > 700 ):
-                zebra2_position_y = -100
-                plot_zebra(gameWindow , white , 445, zebra2_position_y , 10 , 100 )
-                zebra2_position_y += 10
+            zebra2.moveZebra()
+            zebra2.plotZebra()
             
-            plot_zebra(gameWindow , white , 445, zebra2_position_y , 10 , 100 )
-            zebra2_position_y += 10
-
-            if ( zebra3_position_y > 700 ):
-                zebra3_position_y = -100
-                plot_zebra(gameWindow , white , 445, zebra3_position_y , 10 , 100 )
-                zebra3_position_y += 10
+            zebra3.moveZebra()
+            zebra3.plotZebra()
             
-            plot_zebra(gameWindow , white , 445, zebra3_position_y , 10 , 100 )
-            zebra3_position_y += 10
+            zebra4.moveZebra()
+            zebra4.plotZebra()
+            
+            
 
             #------------------------------------------------------------------------------------
 
