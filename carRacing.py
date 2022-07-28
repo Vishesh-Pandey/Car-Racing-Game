@@ -67,11 +67,72 @@ class Zebra:
 zebra1 = Zebra(-100)        
 zebra2 = Zebra(100)        
 zebra3 = Zebra(300)        
-zebra4 = Zebra(500)        
+zebra4 = Zebra(500)     
 
+class Car:
+    def __init__(self , color , x , y , height , width ):
+        self.color = color 
+        self.x = x 
+        self.y = y
+        self.height = height
+        self.width = width
+    
+    def draw(self):
+        pygame.draw.rect(gameWindow , self.color , [ self.x , self.y , self.height , self.width ])
+
+    def move(self):
+        self.y += 20
+        
+        if self.y > 700 :
+            self.y = -150 
+            self.x = random.randint(225 , 625)
+            self.y += 20
+            
+car1 = Car(red , random.randint(225 , 625) , -100 , 50 , 100)
+car2 = Car(gray , random.randint(225 , 625) , -350 , 50 , 100)
+car3 = Car(yellow , random.randint(225 , 625) , -550 , 50 , 100)
+
+opposite_cars = [car1 , car2 , car3]
+
+def drawCar():
+    
+    car1.move()
+    car1.draw()
+    
+    car2.move()
+    car2.draw()
+    
+    car3.move()
+    car3.draw()
+
+def zebraPlot():
+                
+    zebra1.moveZebra()
+    zebra1.plotZebra()
+    
+    zebra2.moveZebra()
+    zebra2.plotZebra()
+    
+    zebra3.moveZebra()
+    zebra3.plotZebra()
+    
+    zebra4.moveZebra()
+    zebra4.plotZebra()
+       
+def reset():
+    car1.x = random.randint(225 , 625)
+    car1.y = -100
+    
+    car2.x = random.randint(225 , 625)
+    car2.y = -350
+    
+    car3.x = random.randint(225 , 625)
+    car3.y = -550
 
 # Creating a game loop
 def gameloop():
+    
+    reset()
 
     exit_game = False
     game_over = False
@@ -102,20 +163,6 @@ def gameloop():
     object5_position_y = 400
     
 
-
-    # Properties of the opposite car comming from the front
-    opposite_car_position_x = random.randint(225 , 625)
-    opposite_car_position_y = -100
-    opposite_car_velocity_y = 20
-
-    opposite_car1_position_x = random.randint(225 , 625)
-    opposite_car1_position_y = -350
-    opposite_car1_velocity_y = 20
-
-    opposite_car2_position_x = random.randint(225 , 625)
-    opposite_car2_position_y = -550
-    opposite_car2_velocity_y = 20
-
     # Properties of fuel
     fuel_position_x = random.randint(225 , 625)
     fuel_position_y = -300
@@ -140,8 +187,7 @@ def gameloop():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         gameloop()
-
-        
+      
         else:
             
             # handling the event in the pygame
@@ -180,26 +226,14 @@ def gameloop():
             textScreen("Score : " + str(score * 10 ) , red , 5 , 5)
             devScreen("Developed by - Vishesh Pandey" , red , 695 , 575)
 
-            # Plotting the zebra to show car is moving ------------------------------------------------------------------------------------------------
+            # Plotting the zebra to show car is moving ------------
+      
+            zebraPlot()
 
-            
-            zebra1.moveZebra()
-            zebra1.plotZebra()
-            
-            zebra2.moveZebra()
-            zebra2.plotZebra()
-            
-            zebra3.moveZebra()
-            zebra3.plotZebra()
-            
-            zebra4.moveZebra()
-            zebra4.plotZebra()
-            
+       
             
 
-            #------------------------------------------------------------------------------------
-
-            #Moving Objects------------------------------------------------------------------------------------------------------
+            #Moving Objects------------------
 
             if ( object_position_y > 620 ):
                 object_position_y = -20
@@ -250,42 +284,13 @@ def gameloop():
             object5_position_y += 10
             
 
-            # Plotting the opposite car-----------------------------------------------------------------------------------------
-         
-
-            if ( opposite_car_position_y > 700 ):
-                opposite_car_position_y = -150 
-                opposite_car_position_x = random.randint(225 , 625) 
-                plot_opposite_car(gameWindow , red , opposite_car_position_x , opposite_car_position_y) 
-                opposite_car_position_y += opposite_car_velocity_y 
-
-            plot_opposite_car(gameWindow , red , opposite_car_position_x , opposite_car_position_y) 
-            opposite_car_position_y += opposite_car_velocity_y 
+            # Plotting the opposite car-----------
+            drawCar()
+            
+  
 
 
-            if ( opposite_car1_position_y > 700 ):
-                opposite_car1_position_y = -150 
-                opposite_car1_position_x = random.randint(225 , 625) 
-                plot_opposite_car(gameWindow , gray , opposite_car1_position_x , opposite_car1_position_y) 
-                opposite_car1_position_y += opposite_car1_velocity_y 
-
-            plot_opposite_car(gameWindow , gray , opposite_car1_position_x , opposite_car1_position_y) 
-            opposite_car1_position_y += opposite_car1_velocity_y 
-
-
-            if ( opposite_car2_position_y > 700 ):
-                opposite_car2_position_y = -150 
-                opposite_car2_position_x = random.randint(225 , 625) 
-                plot_opposite_car(gameWindow , yellow , opposite_car2_position_x , opposite_car2_position_y) 
-                opposite_car2_position_y += opposite_car_velocity_y 
-
-            plot_opposite_car(gameWindow , yellow , opposite_car2_position_x , opposite_car2_position_y) 
-            opposite_car2_position_y += opposite_car2_velocity_y 
-
-            #-------------------------------------------------------------------------------------------------------------------------------
-
-
-            # Plotting the fuel ------------------------------------------------------------------------------------------------
+            # Plotting the fuel -------------------
 
             plot_fuel(gameWindow , red , fuel_position_x , fuel_position_y )
             fuel_position_y += 20
@@ -297,34 +302,27 @@ def gameloop():
                 fuel_position_y += -10
 
             plot_fuel(gameWindow , orange , fuel_position_x , fuel_position_y )
-            fuel_position_y += -10
+            fuel_position_y += -10    
 
-            #--------------------------------------------------------------------------------------------------------------------
-
-
+            #Condition to Increase the score------
             
-
-            #Condition to Increase the score-----------------------------------------------------------------------------
             if abs(car_position_x - fuel_position_x)<50 and abs(car_position_y - fuel_position_y)<50 :
                 score +=1
                 fuel_position_y = -300
                 fuel_position_x = random.randint(225 , 625)
 
-            #------------------------------------------------------------------------------------------------------------
 
-            # Conditions for gameOver-----------------------------------------------------------------------------------
+            # Conditions for gameOver--------------------------
+            
+            for i in opposite_cars :
+                if abs(car_position_x - i.x) < 50 and abs(car_position_y - i.y)<50 :
+                    game_over = True
+                    break
+            
 
             if abs(car_position_x - object_position_x )<10 and abs(car_position_y - object_position_y)<10 :
                 game_over = True
 
-            if abs(car_position_x - opposite_car_position_x )<50 and abs(car_position_y - opposite_car_position_y)<50 :
-                game_over = True
-
-            if abs(car_position_x - opposite_car1_position_x )<50 and abs(car_position_y - opposite_car1_position_y)<50 :
-                game_over = True
-
-            if abs(car_position_x - opposite_car2_position_x )<50 and abs(car_position_y - opposite_car2_position_y)<50 :
-                game_over = True
                 
             #--------------------------------------------------------------------------------------------------------------
 
