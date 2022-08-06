@@ -94,6 +94,26 @@ car3 = Car(yellow , random.randint(225 , 625) , -550 , 50 , 100)
 
 opposite_cars = [car1 , car2 , car3]
 
+class Fuel:
+    def __init__(self , x , y ):
+        self.x = x
+        self.y = y
+        
+    def draw(self):
+        pygame.draw.rect(gameWindow , orange , [self.x , self.y , 50 , 50] )
+
+    def move(self):
+        if (self.y > 600):
+            self.y = -300
+            self.x = random.randint(225 , 625)
+
+        else:
+            self.y += 10
+            
+fuel = Fuel(random.randint(225 , 625) , -300)
+
+
+
 def drawCar():
     
     car1.move()
@@ -161,11 +181,6 @@ def gameloop():
 
     object5_position_x = 0
     object5_position_y = 400
-    
-
-    # Properties of fuel
-    fuel_position_x = random.randint(225 , 625)
-    fuel_position_y = -300
         
     fps = 25
 
@@ -288,29 +303,16 @@ def gameloop():
             drawCar()
             
   
-
-
             # Plotting the fuel -------------------
-
-            plot_fuel(gameWindow , red , fuel_position_x , fuel_position_y )
-            fuel_position_y += 20
-
-            if ( fuel_position_y > 600 ):
-                fuel_position_y = -300 
-                fuel_position_x = random.randint(225 , 625)
-                plot_fuel(gameWindow , orange , fuel_position_x , fuel_position_y )
-                fuel_position_y += -10
-
-            plot_fuel(gameWindow , orange , fuel_position_x , fuel_position_y )
-            fuel_position_y += -10    
+            fuel.draw()
+            fuel.move()
 
             #Condition to Increase the score------
             
-            if abs(car_position_x - fuel_position_x)<50 and abs(car_position_y - fuel_position_y)<50 :
+            if abs(car_position_x - fuel.x)<50 and abs(car_position_y - fuel.y)<50 :
                 score +=1
-                fuel_position_y = -300
-                fuel_position_x = random.randint(225 , 625)
-
+                fuel.y = -300
+                fuel.x = random.randint(225 , 625)
 
             # Conditions for gameOver--------------------------
             
