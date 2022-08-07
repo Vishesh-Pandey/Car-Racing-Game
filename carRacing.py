@@ -9,7 +9,6 @@ black = ( 0 , 0 , 0 ) # Road
 red = (255 , 0 , 0 ) # opposite car
 green = (0 , 255 , 0) # grass
 silver = (192 , 192 , 192) # boundry
-darkGray = ( 169 , 169 , 169)
 gray = (137 , 137 , 137)
 darkGreen = ( 20 , 128 , 8 )
 yellow = (247 , 247 , 11)
@@ -42,14 +41,6 @@ def devScreen(text,color,x,y):
 def plot_car(gameWindow , color , car_x , car_y , car_size_y , car_size_x):
     pygame.draw.rect(gameWindow , color , [ car_x , car_y , car_size_y , car_size_x ])
 
-def plot_fuel(gameWindow , color , fuel_x , fuel_y):
-    pygame.draw.rect(gameWindow , color , [ fuel_x , fuel_y , 50,50 ])
-
-def plot_object(gameWindow , color , object_position_x , object_position_y , object_size_x , object_size_y):
-    pygame.draw.rect(gameWindow , color , [object_position_x , object_position_y , object_size_x , object_size_y])
-
-def plot_opposite_car(gameWindow , color , opposite_car_x , opposite_car_y):
-    pygame.draw.rect(gameWindow , color , [ opposite_car_x , opposite_car_y , 50 , 100])
 
 class Zebra:
     def __init__(self , y ):
@@ -67,7 +58,9 @@ class Zebra:
 zebra1 = Zebra(-100)        
 zebra2 = Zebra(100)        
 zebra3 = Zebra(300)        
-zebra4 = Zebra(500)     
+zebra4 = Zebra(500)  
+
+zebra = [zebra1 , zebra2 , zebra3 , zebra4]   
 
 class Car:
     def __init__(self , color , x , y , height , width ):
@@ -112,32 +105,17 @@ class Fuel:
             
 fuel = Fuel(random.randint(225 , 625) , -300)
 
-
-
 def drawCar():
     
-    car1.move()
-    car1.draw()
-    
-    car2.move()
-    car2.draw()
-    
-    car3.move()
-    car3.draw()
+    for i in opposite_cars :
+        i.move()
+        i.draw()
 
 def zebraPlot():
-                
-    zebra1.moveZebra()
-    zebra1.plotZebra()
     
-    zebra2.moveZebra()
-    zebra2.plotZebra()
-    
-    zebra3.moveZebra()
-    zebra3.plotZebra()
-    
-    zebra4.moveZebra()
-    zebra4.plotZebra()
+    for i in zebra:
+        i.moveZebra()
+        i.plotZebra()
        
 def reset():
     car1.x = random.randint(225 , 625)
@@ -149,6 +127,32 @@ def reset():
     car3.x = random.randint(225 , 625)
     car3.y = -550
 
+class GreenLine:
+    def __init__(self , x , y):
+        self.x = x
+        self.y = y
+        
+    def draw(self):
+         pygame.draw.rect(gameWindow , darkGreen , [self.x , self.y , screen_width , 2])
+
+    def move(self):
+        if self.y > 600 :
+            self.y = -20
+            
+        self.y += 10
+        
+greenLine1 = GreenLine(0 , 0)
+greenLine2 = GreenLine(0 , 200)
+greenLine3 = GreenLine(0 , 400)
+
+greenLines = [greenLine1 , greenLine2 , greenLine3 ]
+
+def drawGreenLines():
+    
+    for greenLine in greenLines:
+        greenLine.draw()
+        greenLine.move()
+        
 # Creating a game loop
 def gameloop():
     
@@ -163,29 +167,9 @@ def gameloop():
     car_size_x = 50
     car_size_y = 100
 
-    # Properties of the objects comming from the front
-    object_position_x = 0
-    object_position_y = 0
 
-    object1_position_x = 0
-    object1_position_y = 200
-
-    object2_position_x = 0
-    object2_position_y = 400
-
-    object3_position_x = 0
-    object3_position_y = 0
-
-    object4_position_x = 0
-    object4_position_y = 200
-
-    object5_position_x = 0
-    object5_position_y = 400
         
     fps = 25
-
-    object_position_x = random.randint(20 , screen_width/2)
-    object_position_y = -50
 
     score = 0
 
@@ -234,6 +218,9 @@ def gameloop():
                 
 
             gameWindow.fill(green)
+            
+            drawGreenLines()
+            
             pygame.draw.rect(gameWindow , black , [ 225 , 0 , 450 , 600 ])
             pygame.draw.rect(gameWindow , darkGreen , [215 , 0 , 10 , 600])
             pygame.draw.rect(gameWindow , darkGreen , [675 , 0 , 10 , 600])
@@ -243,61 +230,7 @@ def gameloop():
 
             # Plotting the zebra to show car is moving ------------
       
-            zebraPlot()
-
-       
-            
-
-            #Moving Objects------------------
-
-            if ( object_position_y > 620 ):
-                object_position_y = -20
-                plot_object(gameWindow, darkGreen , 635 , object_position_y , 250 , 2)
-                object_position_y += 10
-
-            plot_object(gameWindow, darkGreen , 685 , object_position_y , 250 , 2)
-            object_position_y += 10
-
-            if ( object1_position_y > 620 ):
-                object1_position_y = -20
-                plot_object(gameWindow, darkGreen , 635 , object1_position_y , 250 , 2)
-                object1_position_y += 10
-
-            plot_object(gameWindow, darkGreen , 685 , object1_position_y , 250 , 2)
-            object1_position_y += 10
-
-            if ( object2_position_y > 620 ):
-                object2_position_y = -20
-                plot_object(gameWindow, darkGreen , 635 , object2_position_y , 250 , 2)
-                object2_position_y += 10
-
-            plot_object(gameWindow, darkGreen , 685 , object2_position_y , 250 , 2)
-            object2_position_y += 10
-
-            if ( object3_position_y > 620 ):
-                object3_position_y = -20
-                plot_object(gameWindow, darkGreen , 0 , object3_position_y , 215 , 2)
-                object3_position_y += 10
-
-            plot_object(gameWindow, darkGreen , 0 , object3_position_y , 215 , 2)
-            object3_position_y += 10
-
-            if ( object4_position_y > 620 ):
-                object4_position_y = -20
-                plot_object(gameWindow, darkGreen , 0 , object4_position_y , 215 , 2)
-                object4_position_y += 10
-
-            plot_object(gameWindow, darkGreen , 0 , object4_position_y , 215 , 2)
-            object4_position_y += 10
-
-            if ( object5_position_y > 620 ):
-                object5_position_y = -20
-                plot_object(gameWindow, darkGreen , 0 , object5_position_y , 215 , 2)
-                object5_position_y += 10
-
-            plot_object(gameWindow, darkGreen , 0 , object5_position_y , 215 , 2)
-            object5_position_y += 10
-            
+            zebraPlot()   
 
             # Plotting the opposite car-----------
             drawCar()
@@ -320,12 +253,7 @@ def gameloop():
                 if abs(car_position_x - i.x) < 50 and abs(car_position_y - i.y)<50 :
                     game_over = True
                     break
-            
 
-            if abs(car_position_x - object_position_x )<10 and abs(car_position_y - object_position_y)<10 :
-                game_over = True
-
-                
             #--------------------------------------------------------------------------------------------------------------
 
             plot_car(gameWindow , blue , car_position_x , car_position_y , car_size_x , car_size_y )
