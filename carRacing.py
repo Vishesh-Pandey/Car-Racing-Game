@@ -38,10 +38,6 @@ def devScreen(text,color,x,y):
     dev_text = developerFont.render(text,True,color)
     gameWindow.blit(dev_text , [x,y])
 
-def plot_car(gameWindow , color , car_x , car_y , car_size_y , car_size_x):
-    pygame.draw.rect(gameWindow , color , [ car_x , car_y , car_size_y , car_size_x ])
-
-
 class Zebra:
     def __init__(self , y ):
         self.y = y
@@ -63,27 +59,32 @@ zebra4 = Zebra(500)
 zebra = [zebra1 , zebra2 , zebra3 , zebra4]   
 
 class Car:
-    def __init__(self , color , x , y , height , width ):
+    def __init__(self , color , x , y , height , width , speed):
         self.color = color 
         self.x = x 
         self.y = y
         self.height = height
         self.width = width
+        self.speed = speed 
     
     def draw(self):
         pygame.draw.rect(gameWindow , self.color , [ self.x , self.y , self.height , self.width ])
 
     def move(self):
-        self.y += 20
+        if self.speed < 0 :
+            return 
+        
+        self.y += self.speed
         
         if self.y > 700 :
             self.y = -150 
             self.x = random.randint(225 , 625)
-            self.y += 20
-            
-car1 = Car(red , random.randint(225 , 625) , -100 , 50 , 100)
-car2 = Car(gray , random.randint(225 , 625) , -350 , 50 , 100)
-car3 = Car(yellow , random.randint(225 , 625) , -550 , 50 , 100)
+            self.y += self.speed
+
+car = Car(blue , 425 , 500 , 50 , 100 , -20)
+car1 = Car(red , random.randint(225 , 625) , -100 , 50 , 100 , 20)
+car2 = Car(gray , random.randint(225 , 625) , -350 , 50 , 100 , 20)
+car3 = Car(yellow , random.randint(225 , 625) , -550 , 50 , 100 , 20)
 
 opposite_cars = [car1 , car2 , car3]
 
@@ -105,19 +106,11 @@ class Fuel:
             
 fuel = Fuel(random.randint(225 , 625) , -300)
 
-def drawCar():
-    
-    for i in opposite_cars :
-        i.move()
-        i.draw()
-
-def zebraPlot():
-    
-    for i in zebra:
-        i.moveZebra()
-        i.plotZebra()
-       
+      
 def reset():
+    car.x = 425
+    car.y = 500
+    
     car1.x = random.randint(225 , 625)
     car1.y = -100
     
@@ -153,6 +146,22 @@ def drawGreenLines():
         greenLine.draw()
         greenLine.move()
         
+        
+def draw():
+    
+    for i in zebra:
+        i.moveZebra()
+        i.plotZebra()
+        
+    fuel.draw()
+    fuel.move()  
+    
+    car.draw()
+    
+    for opposite_car in opposite_cars :
+        opposite_car.move()
+        opposite_car.draw()
+     
 # Creating a game loop
 def gameloop():
     
@@ -160,17 +169,8 @@ def gameloop():
 
     exit_game = False
     game_over = False
-
-    # Properties of the users car
-    car_position_x = 425 
-    car_position_y = 500
-    car_size_x = 50
-    car_size_y = 100
-
-
-        
+          
     fps = 25
-
     score = 0
 
     while not exit_game : # condition to not exit the game
@@ -201,48 +201,34 @@ def gameloop():
                     # + this will start moving the car
 
                     if event.key == pygame.K_d:
-                        if car_position_x < 625 :
-                            car_position_x += 20
+                        if car.x < 625 :
+                            car.x += 20
 
                     if event.key == pygame.K_a:
-                        if car_position_x > 225 :
-                            car_position_x -= 20
+                        if car.x > 225 :
+                            car.x -= 20
 
                     if event.key == pygame.K_w:
-                        if car_position_y > 0 :
-                            car_position_y -= 20
+                        if car.y > 0 :
+                            car.y -= 20
 
                     if event.key == pygame.K_s:
-                        if car_position_y < 500 :
-                            car_position_y += 20
+                        if car.y < 500 :
+                            car.y += 20
                 
-
             gameWindow.fill(green)
-            
             drawGreenLines()
-            
             pygame.draw.rect(gameWindow , black , [ 225 , 0 , 450 , 600 ])
             pygame.draw.rect(gameWindow , darkGreen , [215 , 0 , 10 , 600])
             pygame.draw.rect(gameWindow , darkGreen , [675 , 0 , 10 , 600])
-
             textScreen("Score : " + str(score * 10 ) , red , 5 , 5)
             devScreen("Developed by - Vishesh Pandey" , red , 695 , 575)
-
-            # Plotting the zebra to show car is moving ------------
       
-            zebraPlot()   
-
-            # Plotting the opposite car-----------
-            drawCar()
-            
-  
-            # Plotting the fuel -------------------
-            fuel.draw()
-            fuel.move()
+            draw()
 
             #Condition to Increase the score------
             
-            if abs(car_position_x - fuel.x)<50 and abs(car_position_y - fuel.y)<50 :
+            if abs(car.x - fuel.x)<50 and abs(car.y - fuel.y)<50 :
                 score +=1
                 fuel.y = -300
                 fuel.x = random.randint(225 , 625)
@@ -250,13 +236,9 @@ def gameloop():
             # Conditions for gameOver--------------------------
             
             for i in opposite_cars :
-                if abs(car_position_x - i.x) < 50 and abs(car_position_y - i.y)<50 :
+                if abs(car.x - i.x) < 50 and abs(car.y - i.y)<50 :
                     game_over = True
                     break
-
-            #--------------------------------------------------------------------------------------------------------------
-
-            plot_car(gameWindow , blue , car_position_x , car_position_y , car_size_x , car_size_y )
 
         pygame.display.update()
         clock.tick(fps)
