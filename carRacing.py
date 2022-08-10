@@ -161,6 +161,23 @@ def draw():
     for opposite_car in opposite_cars :
         opposite_car.move()
         opposite_car.draw()
+        
+def handle_car_movement(keys):
+    if keys[pygame.K_d]:
+        if car.x < 625 :
+            car.x += 5
+            
+    if keys[pygame.K_a] :
+        if car.x < 625 :
+            car.x -= 5
+            
+    if keys[pygame.K_w] :
+        if car.y > 0 :
+            car.y -= 5
+            
+    if keys[pygame.K_s] :
+        if car.y < 500 :
+            car.y += 5 
      
 # Creating a game loop
 def gameloop():
@@ -192,29 +209,10 @@ def gameloop():
             # handling the event in the pygame
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
-                    exit_game = True
-
-                # this code will detect weather you have clicked any key or not
-                if event.type == pygame.KEYDOWN:
-
-                    # this will actually detect which key you have clicked
-                    # + this will start moving the car
-
-                    if event.key == pygame.K_d:
-                        if car.x < 625 :
-                            car.x += 20
-
-                    if event.key == pygame.K_a:
-                        if car.x > 225 :
-                            car.x -= 20
-
-                    if event.key == pygame.K_w:
-                        if car.y > 0 :
-                            car.y -= 20
-
-                    if event.key == pygame.K_s:
-                        if car.y < 500 :
-                            car.y += 20
+                    exit_game = True   
+                    
+            keys = pygame.key.get_pressed()
+            handle_car_movement(keys)
                 
             gameWindow.fill(green)
             drawGreenLines()
