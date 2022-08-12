@@ -20,6 +20,8 @@ orange = (255,165,0) # this is fuel to increase the score
 screen_width = 900
 screen_height = 600
 
+score = 0
+
 clock = pygame.time.Clock()
 
 gameWindow = pygame.display.set_mode(( screen_width , screen_height ))
@@ -108,6 +110,10 @@ fuel = Fuel(random.randint(225 , 625) , -300)
 
       
 def reset():
+    
+    global score 
+    score = 0
+    
     car.x = 425
     car.y = 500
     
@@ -140,14 +146,23 @@ greenLine3 = GreenLine(0 , 400)
 
 greenLines = [greenLine1 , greenLine2 , greenLine3 ]
 
-def drawGreenLines():
+def drawBasicBackground():
+     
+    gameWindow.fill(green)
     
     for greenLine in greenLines:
         greenLine.draw()
         greenLine.move()
-        
-        
+    
+    pygame.draw.rect(gameWindow , black , [ 225 , 0 , 450 , 600 ])
+    pygame.draw.rect(gameWindow , darkGreen , [215 , 0 , 10 , 600])
+    pygame.draw.rect(gameWindow , darkGreen , [675 , 0 , 10 , 600])
+    textScreen("Score : " + str(score * 10 ) , red , 5 , 5)
+    devScreen("Developed by - Vishesh Pandey" , red , 695 , 575)
+           
 def draw():
+    
+    drawBasicBackground()
     
     for i in zebra:
         i.moveZebra()
@@ -162,13 +177,15 @@ def draw():
         opposite_car.move()
         opposite_car.draw()
         
+    pygame.display.update()
+        
 def handle_car_movement(keys):
     if keys[pygame.K_d]:
         if car.x < 625 :
             car.x += 5
             
     if keys[pygame.K_a] :
-        if car.x < 625 :
+        if car.x > 225 :
             car.x -= 5
             
     if keys[pygame.K_w] :
@@ -182,13 +199,14 @@ def handle_car_movement(keys):
 # Creating a game loop
 def gameloop():
     
+    global score 
+    
     reset()
 
     exit_game = False
     game_over = False
           
     fps = 25
-    score = 0
 
     while not exit_game : # condition to not exit the game
 
@@ -214,31 +232,20 @@ def gameloop():
             keys = pygame.key.get_pressed()
             handle_car_movement(keys)
                 
-            gameWindow.fill(green)
-            drawGreenLines()
-            pygame.draw.rect(gameWindow , black , [ 225 , 0 , 450 , 600 ])
-            pygame.draw.rect(gameWindow , darkGreen , [215 , 0 , 10 , 600])
-            pygame.draw.rect(gameWindow , darkGreen , [675 , 0 , 10 , 600])
-            textScreen("Score : " + str(score * 10 ) , red , 5 , 5)
-            devScreen("Developed by - Vishesh Pandey" , red , 695 , 575)
-      
             draw()
 
             #Condition to Increase the score------
-            
             if abs(car.x - fuel.x)<50 and abs(car.y - fuel.y)<50 :
                 score +=1
                 fuel.y = -300
                 fuel.x = random.randint(225 , 625)
 
             # Conditions for gameOver--------------------------
-            
             for i in opposite_cars :
                 if abs(car.x - i.x) < 50 and abs(car.y - i.y)<50 :
                     game_over = True
                     break
 
-        pygame.display.update()
         clock.tick(fps)
             
     pygame.quit()
