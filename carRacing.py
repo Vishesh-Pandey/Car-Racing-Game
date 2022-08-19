@@ -22,6 +22,11 @@ screen_height = 600
 
 score = 0
 
+file = open("highScore.txt" , "r")
+highScore = file.read()
+file.close()
+highScore = int(highScore)
+
 clock = pygame.time.Clock()
 
 gameWindow = pygame.display.set_mode(( screen_width , screen_height ))
@@ -110,6 +115,7 @@ fuel = Fuel(random.randint(225 , 625) , -300)
 
       
 def reset():
+    global highScore
     
     global score 
     score = 0
@@ -125,6 +131,11 @@ def reset():
     
     car3.x = random.randint(225 , 625)
     car3.y = -550
+    
+    file = open("highScore.txt" , "r")
+    highScore = file.read()
+    file.close()
+    highScore = int(highScore)
 
 class GreenLine:
     def __init__(self , x , y):
@@ -157,7 +168,8 @@ def drawBasicBackground():
     pygame.draw.rect(gameWindow , black , [ 225 , 0 , 450 , 600 ])
     pygame.draw.rect(gameWindow , darkGreen , [215 , 0 , 10 , 600])
     pygame.draw.rect(gameWindow , darkGreen , [675 , 0 , 10 , 600])
-    textScreen("Score : " + str(score * 10 ) , red , 5 , 5)
+    textScreen("Score : " + str(score ) , red , 5 , 50)
+    textScreen(f"High Score : {highScore}" , red , 5 , 5)
     devScreen("Developed by - Vishesh Pandey" , red , 695 , 575)
            
 def draw():
@@ -198,9 +210,8 @@ def handle_car_movement(keys):
      
 # Creating a game loop
 def gameloop():
-    
+
     global score 
-    
     reset()
 
     exit_game = False
@@ -236,13 +247,18 @@ def gameloop():
 
             #Condition to Increase the score------
             if abs(car.x - fuel.x)<50 and abs(car.y - fuel.y)<50 :
-                score +=1
+                score +=10
                 fuel.y = -300
                 fuel.x = random.randint(225 , 625)
 
             # Conditions for gameOver--------------------------
             for i in opposite_cars :
                 if abs(car.x - i.x) < 50 and abs(car.y - i.y)<50 :
+                    if highScore < score :
+                        file = open("highScore.txt" , "w")
+                        file.write(f"{score}")
+                        file.close()
+                    
                     game_over = True
                     break
 
